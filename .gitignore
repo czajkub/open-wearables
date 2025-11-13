@@ -160,4 +160,3 @@ volumes
 
 *.json
 *.xml
-upload_xml.py
