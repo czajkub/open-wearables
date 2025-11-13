@@ -15,15 +15,9 @@ class FileType(str, Enum):
 
 
 class PresignedURLRequest(BaseModel):
-    user_id: str = Field(
-        ..., min_length=1, max_length=100, description="Unique user identifier"
-    )
-    file_type: FileType = Field(
-        default=FileType.XML, description="MIME type of the file"
-    )
-    filename: Optional[str] = Field(
-        None, max_length=200, description="Optional custom filename"
-    )
+    user_id: str = Field(..., min_length=1, max_length=100, description="Unique user identifier")
+    file_type: FileType = Field(default=FileType.XML, description="MIME type of the file")
+    filename: Optional[str] = Field(None, max_length=200, description="Optional custom filename")
     expiration_seconds: Optional[int] = Field(
         default=DEFAULT_EXPIRATION,
         ge=60,
@@ -47,10 +41,12 @@ class PresignedURLResponse(BaseModel):
     content_type: str
     bucket: str
 
+
 class S3Event(BaseModel):
     bucket_name: str
     object_key: str
     event_name: str
+
 
 class SQSMessage(BaseModel):
     Message: str

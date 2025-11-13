@@ -21,4 +21,3 @@ try:
     )
 except NoCredentialsError:
     raise Exception("AWS credentials not configured")
-

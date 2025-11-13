@@ -22,7 +22,7 @@ def process_uploaded_file(bucket_name: str, object_key: str, user_id: str):
         user_id: User ID to associate with imported data (optional, extracted from object_key if not provided)
     """
     db = SessionLocal()
-    
+
     temp_xml_file = None
     dump_file = None
 
@@ -40,7 +40,6 @@ def process_uploaded_file(bucket_name: str, object_key: str, user_id: str):
             raise e
         finally:
             db.close()
-
 
         result = {
             "bucket": bucket_name,

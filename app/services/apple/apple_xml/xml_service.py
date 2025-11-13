@@ -56,10 +56,12 @@ class XMLService:
         "unit",
     )
 
-    def update_record(self, kind: str, document: dict[str, Any], user_id: str = None) -> HKRecordCreate | HKWorkoutCreate | list[HKWorkoutStatisticCreate] | None:
+    def update_record(
+        self, kind: str, document: dict[str, Any], user_id: str = None
+    ) -> HKRecordCreate | HKWorkoutCreate | list[HKWorkoutStatisticCreate] | None:
         """
         Create schema objects from XML document data.
-        
+
         Args:
             kind: Type of record to create ('record', 'workout', or 'stat')
             document: Dictionary of attributes from XML element
@@ -97,31 +99,35 @@ class XMLService:
 
         if kind == "stat":
             statistics: list[HKWorkoutStatisticCreate] = []
-            for field in ['sum', 'average', 'maximum', 'minimum']:
+            for field in ["sum", "average", "maximum", "minimum"]:
                 if field in document:
-                    statistics.append(HKWorkoutStatisticCreate(
-                        id=uuid4(),
-                        user_id=user_id,
-                        workout_id=document["workout_id"],
-                        type=document["type"],
-                        value=document[field],
-                        unit=document["unit"],
-                    ))
+                    statistics.append(
+                        HKWorkoutStatisticCreate(
+                            id=uuid4(),
+                            user_id=user_id,
+                            workout_id=document["workout_id"],
+                            type=document["type"],
+                            value=document[field],
+                            unit=document["unit"],
+                        )
+                    )
 
         return statistics if statistics else None
 
-    def parse_xml(self, user_id: str = None) -> Generator[tuple[list[HKWorkoutCreate], list[list[HKWorkoutStatisticCreate]]], Any, None]:
+    def parse_xml(
+        self, user_id: str = None
+    ) -> Generator[tuple[list[HKWorkoutCreate], list[list[HKWorkoutStatisticCreate]]], Any, None]:
         """
         Parses the XML file and yields tuples of workouts and statistics.
         Extracts attributes from each Record/Workout element.
-        
+
         Args:
             user_id: User ID to associate with parsed records
         """
         records: list[HKRecordCreate] = []
         workouts: list[HKWorkoutCreate] = []
         statistics: list[list[HKWorkoutStatisticCreate]] = []
-        
+
         for event, elem in ET.iterparse(self.xml_path, events=("start",)):
             if elem.tag == "Record" and event == "start":
                 if len(records) >= self.chunk_size:

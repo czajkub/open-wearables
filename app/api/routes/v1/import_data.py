@@ -62,8 +62,7 @@ async def import_xml(
 ) -> PresignedURLResponse:
     """Generate presigned URL for XML file upload and trigger processing task."""
     presigned_response = pre_url_service.create_presigned_url(request)
-    
-    poll_sqs_task.delay(presigned_response.expires_in, user_id=user_id)
-    
-    return presigned_response
 
+    poll_sqs_task.delay(presigned_response.expires_in, user_id=user_id)
+
+    return presigned_response

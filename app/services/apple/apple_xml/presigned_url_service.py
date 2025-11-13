@@ -14,10 +14,7 @@ class ImportService:
     def __init__(self, log: Logger, **kwargs):
         self.log = log
 
-    def generate_file_key(
-        self,
-        user_id: str, filename: Optional[str] = None
-    ) -> str:
+    def generate_file_key(self, user_id: str, filename: Optional[str] = None) -> str:
         timestamp = datetime.now(UTC)
 
         if filename:
@@ -40,9 +37,7 @@ class ImportService:
             elif error_code == "403":
                 raise HTTPException(status_code=500, detail="Access denied to S3 bucket")
             else:
-                raise HTTPException(
-                    status_code=500, detail=f"S3 bucket error: {error_code}"
-                )
+                raise HTTPException(status_code=500, detail=f"S3 bucket error: {error_code}")
 
     def create_presigned_url(self, request: PresignedURLRequest) -> str:
         self.validate_bucket_exists()
@@ -78,9 +73,7 @@ class ImportService:
 
         except ClientError as e:
             error_code = e.response["Error"]["Code"]
-            raise HTTPException(
-                status_code=500, detail=f"Failed to generate presigned URL: {error_code}"
-            )
+            raise HTTPException(status_code=500, detail=f"Failed to generate presigned URL: {error_code}")
         except Exception as e:
             raise HTTPException(status_code=500, detail=f"Unexpected error: {str(e)}")
 
