@@ -21,7 +21,6 @@ class ImportService:
         timestamp = datetime.now(UTC)
 
         if filename:
-            # Clean filename and preserve extension
             clean_filename = "".join(c for c in filename if c.isalnum() or c in ".-_")
             file_key = f"{user_id}/raw/{clean_filename}"
         else:
@@ -46,17 +45,14 @@ class ImportService:
                 )
 
     def create_presigned_url(self, request: PresignedURLRequest) -> str:
-        # Validate bucket accessibility
         self.validate_bucket_exists()
 
-        # Generate unique file key
         file_key = self.generate_file_key(
             user_id=request.user_id,
             filename=request.filename,
         )
 
         try:
-            # Create presigned URL with conditions
             conditions = [
                 ["content-length-range", 1, request.max_file_size],
                 {"Content-Type": request.file_type.value},
@@ -87,5 +83,6 @@ class ImportService:
             )
         except Exception as e:
             raise HTTPException(status_code=500, detail=f"Unexpected error: {str(e)}")
+
 
 import_service = ImportService(getLogger(__name__))

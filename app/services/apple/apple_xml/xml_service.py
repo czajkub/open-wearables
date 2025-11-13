@@ -4,8 +4,6 @@ from typing import Any, Generator
 from uuid import uuid4
 from xml.etree import ElementTree as ET
 
-import pandas as pd
-
 from app.schemas import HKWorkoutStatisticCreate, HKWorkoutCreate, HKRecordCreate
 
 
@@ -58,7 +56,7 @@ class XMLService:
         "unit",
     )
 
-    def update_record(self, kind: str, document: dict[str, Any], user_id: str = None) -> HKWorkoutCreate | list[HKWorkoutStatisticCreate] | None:
+    def update_record(self, kind: str, document: dict[str, Any], user_id: str = None) -> HKRecordCreate | HKWorkoutCreate | list[HKWorkoutStatisticCreate] | None:
         """
         Create schema objects from XML document data.
         
@@ -156,5 +154,5 @@ class XMLService:
                         statistics.append(statistics_create)
             elem.clear()
 
-        # yield records
+        # yield remaining records and workout pairs
         yield records, zip(workouts, statistics)

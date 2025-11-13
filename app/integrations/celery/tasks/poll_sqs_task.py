@@ -8,13 +8,12 @@ import boto3
 from celery import shared_task
 
 from app.integrations.celery.tasks.process_upload_task import process_uploaded_file
-from app.database import DbSession
 
 
 load_dotenv(Path(__file__).resolve().parents[4] / "config" / ".env")
 
-QUEUE_URL: str = "https://sqs.eu-north-1.amazonaws.com/539516441427/owear-queue"
-AWS_REGION = os.getenv("AWS_REGION", "eu-north-1")
+QUEUE_URL: str = os.getenv("SQS_QUEUE_URL")
+AWS_REGION: str = os.getenv("AWS_REGION", "eu-north-1")
 
 sqs = boto3.client("sqs", region_name=AWS_REGION)
 
@@ -48,7 +47,6 @@ def poll_sqs_messages(user_id: str):
                         message_body = json.loads(message_body)
                     except json.JSONDecodeError:
                         print(f"[poll_sqs_messages] Message {message_id} is not valid JSON, skipping: {message_body[:100]}")
-                        # Delete non-JSON messages and continue
                         sqs.delete_message(QueueUrl=QUEUE_URL, ReceiptHandle=receipt_handle)
                         failed_count += 1
                         continue
@@ -78,7 +76,6 @@ def poll_sqs_messages(user_id: str):
             except Exception as e:
                 print(f"[poll_sqs_messages] Error processing message {message_id}: {str(e)}")
                 failed_count += 1
-                # Don't delete the message on error - let it be retried
                 continue
 
         result = {
