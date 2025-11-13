@@ -78,6 +78,7 @@ class XMLService:
                 type=document["type"],
                 startDate=document["startDate"],
                 endDate=document["endDate"],
+                sourceName=document["sourceName"],
                 unit=document["unit"],
                 value=document["value"],
             )
@@ -126,8 +127,9 @@ class XMLService:
         for event, elem in ET.iterparse(self.xml_path, events=("start",)):
             if elem.tag == "Record" and event == "start":
                 if len(records) >= self.chunk_size:
-                    # yield zip(records, [])
+                    yield records, zip(workouts, statistics)
                     records = []
+                    workouts = []
                 record: dict[str, Any] = elem.attrib.copy()
                 record_create = self.update_record("record", record, user_id)
                 if record_create:
@@ -135,7 +137,8 @@ class XMLService:
 
             elif elem.tag == "Workout" and event == "start":
                 if len(workouts) >= self.chunk_size:
-                    yield zip(workouts, statistics)
+                    yield records, zip(workouts, statistics)
+                    records = []
                     workouts = []
                 workout: dict[str, Any] = elem.attrib.copy()
                 workout_create = self.update_record("workout", workout, user_id)
@@ -154,4 +157,4 @@ class XMLService:
             elem.clear()
 
         # yield records
-        yield zip(workouts, statistics)
+        yield records, zip(workouts, statistics)

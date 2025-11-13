@@ -7,7 +7,7 @@ from sqlalchemy.orm import Session
 
 from app.services.apple.apple_xml.aws_service import s3_client
 from app.services.apple.apple_xml.xml_service import XMLService
-from app.services import hk_workout_service, hk_workout_statistic_service
+from app.services import hk_workout_service, hk_workout_statistic_service, hk_record_service
 from app.database import SessionLocal
 
 
@@ -80,8 +80,10 @@ def _import_xml_data(db: Session, xml_path: str, user_id: str) -> None:
     """
     xml_service = XMLService(Path(xml_path))
 
-    for workout_pair in xml_service.parse_xml(user_id):
-        for workout, statistics in workout_pair:
+    for records, workout_pairs in xml_service.parse_xml(user_id):
+        for record in records:
+            hk_record_service.create(db, record)
+        for workout, statistics in workout_pairs:
             if workout:
                 hk_workout_service.create(db, workout)
             for stat in statistics:
