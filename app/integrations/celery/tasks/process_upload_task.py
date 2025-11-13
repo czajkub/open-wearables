@@ -23,11 +23,11 @@ def process_uploaded_file(bucket_name: str, object_key: str):
     db = SessionLocal()
 
     temp_xml_file = None
-    dump_file = None
 
     try:
         temp_dir = tempfile.gettempdir()
         temp_xml_file = os.path.join(temp_dir, f"temp_import_{object_key.split('/')[-1]}")
+        
         user_id = object_key.split('/')[-3]
 
         s3_client.download_file(bucket_name, object_key, temp_xml_file)
@@ -64,8 +64,6 @@ def process_uploaded_file(bucket_name: str, object_key: str):
     finally:
         if temp_xml_file and os.path.exists(temp_xml_file):
             os.remove(temp_xml_file)
-        if dump_file and os.path.exists(dump_file):
-            os.remove(dump_file)
 
 
 def _import_xml_data(db: Session, xml_path: str, user_id: str) -> None:

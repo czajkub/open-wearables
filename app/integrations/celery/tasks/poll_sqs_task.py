@@ -8,14 +8,12 @@ import boto3
 from celery import shared_task
 
 from app.integrations.celery.tasks.process_upload_task import process_uploaded_file
+from app.config import settings
 
 
-load_dotenv(Path(__file__).resolve().parents[4] / "config" / ".env")
+QUEUE_URL: str = settings.sqs_queue_url
 
-QUEUE_URL: str = os.getenv("SQS_QUEUE_URL")
-AWS_REGION: str = os.getenv("AWS_REGION", "eu-north-1")
-
-sqs = boto3.client("sqs", region_name=AWS_REGION)
+sqs = boto3.client("sqs", region_name=settings.aws_region)
 
 
 @shared_task()

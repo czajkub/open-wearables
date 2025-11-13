@@ -5,11 +5,11 @@ import boto3
 from botocore.exceptions import NoCredentialsError
 from dotenv import load_dotenv
 
+from app.config import settings
 
-load_dotenv(Path(__file__).resolve().parents[4] / "config" / ".env")
 
-AWS_BUCKET_NAME = os.getenv("AWS_BUCKET_NAME", "open-wearables-xml")
-AWS_REGION = os.getenv("AWS_REGION", "eu-north-1")
+AWS_BUCKET_NAME = settings.aws_bucket_name
+AWS_REGION = settings.aws_region
 DEFAULT_EXPIRATION = 300  # 5 minutes
 
 try:
