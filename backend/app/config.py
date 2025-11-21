@@ -22,7 +22,7 @@ class Settings(BaseSettings):
     )
 
     # CORE SETTINGS
-    fernet_decryptor: FernetDecryptorField = Field("MASTER_KEY")
+    fernet_decryptor: FernetDecryptorField = Field(FernetDecryptorField("MASTER_KEY"))
     environment: EnvironmentType = EnvironmentType.LOCAL
 
     # API SETTINGS

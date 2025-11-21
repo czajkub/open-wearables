@@ -65,7 +65,7 @@ class WorkoutRepository(CrudRepository[Workout, AEWorkoutCreate, AEWorkoutUpdate
         total_count = query.count()
 
         # Apply sorting
-        sort_column = getattr(Workout, query_params.sort_by, Workout.startDate)
+        sort_column = getattr(Workout, query_params.sort_by, Workout.startDate)  # type: ignore[no-matching-overload]
 
         query = query.order_by(sort_column) if query_params.sort_order == "asc" else query.order_by(desc(sort_column))
 

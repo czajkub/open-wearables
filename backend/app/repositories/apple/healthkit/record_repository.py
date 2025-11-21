@@ -64,7 +64,7 @@ class RecordRepository(CrudRepository[Record, HKRecordCreate, HKRecordUpdate]):
         total_count = query.count()
 
         # Apply sorting
-        sort_column = getattr(Record, query_params.sort_by, Record.startDate)
+        sort_column = getattr(Record, query_params.sort_by, Record.startDate)  # type: ignore[no-matching-overload]
 
         query = query.order_by(sort_column) if query_params.sort_order == "asc" else query.order_by(desc(sort_column))
 

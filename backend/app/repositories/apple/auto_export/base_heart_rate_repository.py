@@ -72,7 +72,7 @@ class BaseHeartRateRepository[HeartRateModel: BaseDbModel]:
             Query with sorting and pagination applied
         """
         # Apply sorting
-        sort_column = getattr(self.model, query_params.sort_by, self.model.date)
+        sort_column = getattr(self.model, query_params.sort_by, self.model.date)  # type: ignore[no-matching-overload]
 
         query = query.order_by(sort_column) if query_params.sort_order == "asc" else query.order_by(desc(sort_column))
 

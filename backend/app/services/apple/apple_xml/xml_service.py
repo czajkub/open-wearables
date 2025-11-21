@@ -111,7 +111,7 @@ class XMLService:
                     HKWorkoutStatisticCreate(
                         id=uuid4(),
                         user_id=UUID(user_id),
-                        workout_id=document["workout_id"],
+                        workout_id=UUID(document["workout_id"]),
                         type=document["type"],
                         value=document[field],
                         unit=document["unit"],
@@ -177,8 +177,8 @@ class XMLService:
                         yield records, workouts, statistics
                     if stat.tag != "WorkoutStatistics":
                         continue
-                    statistic: dict[str, Any] = stat.attrib.copy()
-                    statistic["workout_id"] = workout_create.id
+                    statistic = stat.attrib.copy()
+                    statistic["workout_id"] = str(workout_create.id)
                     statistics.extend(self._create_statistics(statistic, user_id))
                 elem.clear()
 

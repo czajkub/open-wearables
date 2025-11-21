@@ -11,24 +11,24 @@ router = APIRouter()
 
 @router.get("/users")
 async def list_users(db: DbSession, _developer: DeveloperDep) -> list[UserRead]:
-    return db.query(user_service.crud.model).all()
+    return [UserRead.model_validate(user) for user in db.query(user_service.crud.model).all()]
 
 
 @router.get("/users/{user_id}")
 async def get_user(user_id: UUID, db: DbSession, _api_key: ApiKeyDep) -> UserRead:
-    return user_service.get(db, user_id, raise_404=True)
+    return UserRead.model_validate(user_service.get(db, user_id, raise_404=True))
 
 
 @router.post("/users", status_code=201)
 async def create_user(payload: UserCreate, db: DbSession, _api_key: ApiKeyDep) -> UserRead:
-    return user_service.create(db, payload)
+    return UserRead.model_validate(user_service.create(db, payload))
 
 
 @router.delete("/users/{user_id}")
 async def delete_user(user_id: UUID, db: DbSession, _developer: DeveloperDep) -> UserRead:
-    return user_service.delete(db, user_id, raise_404=True)
+    return UserRead.model_validate(user_service.delete(db, user_id, raise_404=True))
 
 
 @router.patch("/users/{user_id}")
 async def update_user(user_id: UUID, payload: UserUpdate, db: DbSession, _developer: DeveloperDep) -> UserRead:
-    return user_service.update(db, user_id, payload, raise_404=True)
+    return UserRead.model_validate(user_service.update(db, user_id, payload, raise_404=True))

@@ -83,7 +83,7 @@ class ImportService:
 
             record_row = HKRecordIn(
                 id=uuid4(),
-                provider_id=UUID(provider_id) if provider_id else None,
+                provider_id=provider_id,
                 user_id=user_id,
                 type=rjson.type or "Unknown",
                 startDate=rjson.startDate,
