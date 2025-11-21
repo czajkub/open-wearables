@@ -22,7 +22,7 @@ class Settings(BaseSettings):
     )
 
     # CORE SETTINGS
-    fernet_decryptor: FernetDecryptorField = Field("MASTER_KEY")
+    fernet_decryptor: FernetDecryptorField = Field(FernetDecryptorField("MASTER_KEY"))
     environment: EnvironmentType = EnvironmentType.LOCAL
 
     # API SETTINGS
@@ -100,7 +100,7 @@ class Settings(BaseSettings):
     aws_secret_access_key: str | None = None
     aws_region: str = "eu-north-1"
     sqs_queue_url: str | None = None
-    
+
     xml_chunk_size: int = 50_000
     # min, default, max
     presigned_url_expiration_seconds: tuple[int, int, int] = (60, 300, 3600)  # 1 min, 5 min, 1 hour
