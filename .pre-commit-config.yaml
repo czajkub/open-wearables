@@ -1,5 +1,4 @@
-default:
-  exclude: ^backend/(migrations/|app/models/|README.md|.python-version|LICENSE)
+exclude: ^backend/(migrations/|app/models/|README.md|.python-version|LICENSE)
 
 repos:
   - repo: https://github.com/astral-sh/ruff-pre-commit
@@ -20,11 +19,15 @@ repos:
         entry: sh -c 'cd backend && .venv/bin/ty check .'
         language: system
         files: ^backend/.*\.py$
+        pass_filenames: false
 
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v6.0.0
     hooks:
       - id: trailing-whitespace
+        files: ^backend/
       - id: end-of-file-fixer
+        files: ^backend/
       - id: check-merge-conflict
         args: [--assume-in-merge]
+        files: ^backend/

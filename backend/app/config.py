@@ -93,7 +93,7 @@ class Settings(BaseSettings):
     polar_token_url: str = "https://polarremote.com/v2/oauth2/token"
     polar_api_base_url: str = "https://www.polaraccesslink.com"
     polar_default_scope: str = "accesslink.read_all"
-    
+
     # AWS SETTINGS
     aws_bucket_name: str | None = None
     aws_access_key_id: str | None = None
@@ -105,7 +105,6 @@ class Settings(BaseSettings):
     # min, default, max
     presigned_url_expiration_seconds: tuple[int, int, int] = (60, 300, 3600)  # 1 min, 5 min, 1 hour
     presigned_url_max_filesize: tuple[int, int, int] = (1024, 50 * 1024 * 1024, 1024 * 1024 * 1024)  # 1KB, 50MB, 1GB
-      
 
     @field_validator("cors_origins", mode="after")
     @classmethod
