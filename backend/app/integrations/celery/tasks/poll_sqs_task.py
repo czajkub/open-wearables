@@ -62,7 +62,7 @@ def poll_sqs_messages():
                         object_key = record["s3"]["object"]["key"]
 
                         # Enqueue Celery task
-                        task = process_uploaded_file.delay(bucket_name, object_key)
+                        process_uploaded_file.delay(bucket_name, object_key)
                         processed_count += 1
 
                 # Delete message from queue after processing
